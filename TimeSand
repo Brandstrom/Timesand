@@ -1,0 +1,136 @@
+
+const int green0= A0;
+const int green1= A1;
+const int green2= A2;
+const int green3= A3;
+const int green4= A4;
+
+const int blue0= 11;
+const int blue1= 10;
+const int blue2= 9;
+const int blue3= 6;
+const int blue4= 3;
+ int light[5];
+int sand=0;
+const int interval=2;
+//const int threshold=80;
+boolean fade;
+int tilt=13;
+void  setup(){
+boolean fade=false;
+  for( int i=0 ; i< sizeof(light);i++ ){
+    light[i]=0;
+  }
+  pinMode(tilt,INPUT_PULLUP);
+  /*
+  pinMode(green0,OUTPUT);
+   pinMode(green1,OUTPUT);
+   pinMode(green2,OUTPUT);
+   pinMode(green3,OUTPUT);
+   pinMode(green4,OUTPUT);*/
+  pinMode(blue0,OUTPUT);
+  pinMode(blue1,OUTPUT);
+  pinMode(blue2,OUTPUT);
+  pinMode(blue3,OUTPUT);
+  pinMode(blue4,OUTPUT);
+  Serial.begin(9600);
+
+}
+
+
+void loop(){
+if(digitalRead(tilt)==1){
+  fade=true;
+}else{
+    fade=false;
+}
+
+
+
+  if(!fade){
+    sand++;
+    if(sand > 1000){
+       sand=1000;
+    }
+  }else{
+      sand--;
+    if(sand < 0){
+         sand=0;
+    }
+  }
+  if(sand <500){
+ light[0]= map(constrain(sand,0,100),-100,100,0,254);
+   light[1]= map(constrain(sand,100,200),100,200,0,254);
+    light[2]= map(constrain(sand,200,300),200,300,0,254);
+     light[3]= map(constrain(sand,300,400),300,400,0,254);
+      light[4]= map(constrain(sand,400,500),400,500,0,254);
+  }else{
+       light[0]= map(constrain(sand,500,600),500,600,254,0);
+   light[1]= map(constrain(sand,600,700),600,700,254,0);
+    light[2]= map(constrain(sand,700,800),700,800,254,0);
+     light[3]= map(constrain(sand,800,900),800,900,254,0);
+      light[4]= map(constrain(sand,900,1000),900,1100,254,0);
+  }
+  
+ // Serial.println(digitalRead(tilt));
+/*
+  if(fade==false){
+    light[0]+=interval;
+    if(light[0]>254){
+      light[0]=254;
+    }
+
+    for( int i=0 ; i< sizeof(light) ;i++ ){
+      if(light[i]>threshold){
+        light[i+1]+=interval;
+        if(light[i+1]>254){
+          light[i+1]=254;
+        }   
+      } 
+    }
+    
+    
+    if(light[4]>253){
+      fade=true;
+    }
+  }
+  if(fade==true){
+    light[0]-=interval;
+    if(light[0]<0){
+      light[0]=0;
+    }
+
+    for( int i=0 ; i< sizeof(light) ;i++ ){
+      if(light[i]<20){
+        light[i+1]-=interval;
+        if(light[i+1]<0){
+          light[i+1]=0;
+        }   
+      } 
+    }
+
+  }
+*/
+ Serial.println(sand);
+ analogWrite(blue0,light[0]);
+// Serial.print(light[0]);
+ // Serial.print(" ");
+  analogWrite(blue1,light[1]);
+ //  Serial.print(light[1]);
+  //  Serial.print(" ");
+  analogWrite(blue2,light[2]);
+  // Serial.print(light[2]);
+  //  Serial.print(" ");
+  analogWrite(blue3,light[3]);
+ //  Serial.print(light[3]);
+  //  Serial.print(" ");
+  analogWrite(blue4,light[4]);
+  // Serial.print(light[4]);
+  //  Serial.println(" ");
+  delay(10);
+
+
+}
+
+
+
